@@ -16,7 +16,6 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${OBIX_DIR}/configure --host=${CONFIG_HOST} --target=${CONFIG_HOST} --srcdir=${OBIX_DIR} --prefix=${OBIX_BIN} --enable-static=yes
   BUILD_COMMAND make -j8
   BUILD_BYPRODUCTS ${OBIX_STATIC_LIB}
-  TEST_COMMAND cp ${OBIX_BIN}/lib/libfcgi.dylib ${CMAKE_BINARY_DIR}/lib/
   )
 
 add_library(fcgi2 STATIC IMPORTED GLOBAL)
@@ -24,3 +23,6 @@ add_dependencies(fcgi2 libfcgi)
 
 set_target_properties(fcgi2 PROPERTIES IMPORTED_LOCATION ${OBIX_STATIC_LIB})
 set_target_properties(fcgi2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${OBIX_INCLUDES})
+
+file(GLOB OUTPUT_LIBS "${OBIX_BIN}/lib/libfcgi.*")
+file(COPY ${OUTPUT_LIBS} DESTINATION ${CMAKE_BINARY_DIR}/lib)
